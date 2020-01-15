@@ -30,9 +30,52 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+typedef struct ListNode
+{
+    int val;
+    struct ListNode *next;
+} ListNode;
+ListNode *create()
+{
+    ListNode *Head, *Pointer, *New;
+    Head = (ListNode *)malloc(sizeof(struct ListNode));
+    if (Head == NULL)
+    {
+        printf("内存分配失败");
+    }
+    else
+    {
+        int data = 1;
+        Head->val = data;
+        Head->next = NULL;
+        Pointer = Head;
+        int initdata[4] = {0, 0, 1, 1};
+        for (int i = 0; i < 4; i++)
+        {
+            New = (ListNode *)malloc(sizeof(struct ListNode));
+            New->val = initdata[i];
+            Pointer->next = New;
+            Pointer = New;
+        }
+    }
+    return Head;
+}
+int getDecimalValue(struct ListNode *head)
+{
+    int sum = 0;
+    while (head != NULL)
+    {
 
+        sum = sum * 2 + head->val;
+        head = head->next;
+    }
+    return sum;
+}
 int main()
 {
-
+    ListNode *head;
+    head = create();
+    getDecimalValue(head);
     return 0;
 }
