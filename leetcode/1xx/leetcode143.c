@@ -19,9 +19,54 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+typedef struct ListNode
+{
+    int val;
+    struct ListNode *next;
+} ListNode;
 
+ListNode *create()
+{
+    ListNode *Head, *Pointer, *New;
+    Head = (ListNode *)malloc(sizeof(struct ListNode));
+    if (Head == NULL)
+    {
+        printf("内存分配失败");
+    }
+    else
+    {
+        int data = 1;
+        Head->val = data;
+        Head->next = NULL;
+        Pointer = Head;
+        int initdata[3] = {2, 3, 4};
+        for (int i = 0; i < 3; i++)
+        {
+            New = (ListNode *)malloc(sizeof(struct ListNode));
+            New->val = initdata[i];
+            Pointer->next = New;
+            Pointer = New;
+        }
+    }
+    return Head;
+}
+
+void reorderList(struct ListNode *head)
+{
+    struct ListNode *p;
+    p = head;
+    while (head)
+    {
+        printf("%d", head->val);
+        head = head->next;
+        /* code */
+    }
+}
 int main()
 {
-
+    struct ListNode *head;
+    head = create();
+    reorderList(head);
     return 0;
 }
