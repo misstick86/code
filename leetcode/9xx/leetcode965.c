@@ -21,24 +21,29 @@
 
 */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <stdlib.h>
-
-struct TreeNode
+typedef int ElemType;
+typedef struct TreeNode
 {
-    int val;
+    ElemType val;
     struct TreeNode *left;
     struct TreeNode *right;
-};
+} TreeNode;
 
-void createTree(struct TreeNode *bt, int *node)
+TreeNode *createBtTree(ElemType *nodelist, int i)
 {
-    while (*node)
+    TreeNode *newnode;
+    if (nodelist[i] == 0 || i > 7)
+        return NULL;
+    else
     {
-
-        bt->val = *node;
-        node++;
+        newnode = (TreeNode *)malloc(sizeof(TreeNode));
+        newnode->val = nodelist[i];
+        newnode->left = createBtTree(nodelist, 2 * i);
+        newnode->right = createBtTree(nodelist, 2 * i + 1);
+        return newnode;
     }
 }
 bool isUnivalTree(struct TreeNode *root)
@@ -46,8 +51,8 @@ bool isUnivalTree(struct TreeNode *root)
 }
 int main()
 {
-    struct TreeNode mytree;
-    int a[] = {1, 1, 1, 1, 1, NULL, 1};
-    createTree(&mytree, a);
+    ElemType node[] = {0, 1, 1, 1, 1, 1, 0, 1};
+    TreeNode *mytree = NULL;
+    mytree = createBtTree(node, 1);
     return 0;
 }
