@@ -48,11 +48,16 @@ TreeNode *createBtTree(ElemType *nodelist, int i)
 }
 bool isUnivalTree(struct TreeNode *root)
 {
+    if (root->left != NULL || root->right != NULL)
+    {
+        return root->val == isUnivalTree(root->left) && root->val == isUnivalTree(root->right);
+    }
 }
 int main()
 {
     ElemType node[] = {0, 1, 1, 1, 1, 1, 0, 1};
     TreeNode *mytree = NULL;
     mytree = createBtTree(node, 1);
+    printf("%d", isUnivalTree(mytree));
     return 0;
 }
