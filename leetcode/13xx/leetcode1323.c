@@ -41,12 +41,23 @@ num 每一位上的数字都是 6 或者 9 。
 */
 
 #include <stdio.h>
-
+#include <math.h>
 int maximum69Number(int num)
 {
+    if (num / 1000 == 6)
+        return num + 3000;
+    if ((num / 100) % 10 == 6)
+        return num + 300;
+    if ((num / 10) % 10 == 6)
+        return num + 30;
+    if (num % 10 == 6)
+        return num + 3;
+    return num;
 }
 int main()
 {
-    maximum69Number(9996);
+    int a;
+    a = maximum69Number(9999);
+    printf("%d", a);
     return 0;
 }
