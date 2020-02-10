@@ -35,7 +35,7 @@ typedef struct TreeNode
 TreeNode *createBtTree(ElemType *nodelist, int i)
 {
     TreeNode *newnode;
-    if (nodelist[i] == 0 || i > 7)
+    if (nodelist[i] == 0 || i > 5)
         return NULL;
     else
     {
@@ -48,14 +48,30 @@ TreeNode *createBtTree(ElemType *nodelist, int i)
 }
 bool isUnivalTree(struct TreeNode *root)
 {
-    if (root->left != NULL || root->right != NULL)
+    bool flag = true;
+    if (root == NULL)
     {
-        return root->val == isUnivalTree(root->left) && root->val == isUnivalTree(root->right);
+        return true;
     }
+    else
+    {
+        if (root->left != NULL)
+        {
+            bool left = root->val == root->left->val ? true : false;
+            flag = flag && left;
+        }
+        if (root->right != NULL)
+        {
+            bool right = root->val == root->right->val ? true : false;
+            flag = flag && right;
+        }
+    }
+    flag = flag && isUnivalTree(root->left) && isUnivalTree(root->right);
+    return flag;
 }
 int main()
 {
-    ElemType node[] = {0, 1, 1, 1, 1, 1, 0, 1};
+    ElemType node[] = {0, 2, 2, 2, 5, 2};
     TreeNode *mytree = NULL;
     mytree = createBtTree(node, 1);
     printf("%d", isUnivalTree(mytree));
