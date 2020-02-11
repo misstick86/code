@@ -21,13 +21,13 @@
 #include <stdio.h>
 int trailingZeroes(int n)
 {
-    int i = 0;
-    while (n >= 5)
+    int count = 0;
+    while (n > 0)
     {
-        n = n - 5;
+        count += n / 5;
     }
-    printf("%d", i);
-    return i;
+    printf("%d", count);
+    return count;
 }
 int main()
 {
