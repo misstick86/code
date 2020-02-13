@@ -26,9 +26,40 @@
 */
 
 #include <stdio.h>
+#include <malloc.h>
+#include <stdbool.h>
 
+struct TreeNode
+{
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+struct TreeNode *CreateTree(int *nodelist, int i)
+{
+    struct TreeNode *new;
+    if (nodelist[i] == 0 || i > 7)
+    {
+        return NULL;
+    }
+    else
+    {
+        new = (struct TreeNode *)malloc(sizeof(struct TreeNode));
+        new->val = nodelist[i];
+        new->left = CreateTree(nodelist, 2 * i);
+        new->right = CreateTree(nodelist, 2 * i + 1);
+        return new;
+    }
+}
+bool isSymmetric(struct TreeNode *root)
+{
+}
 int main()
 {
-
+    struct TreeNode *root;
+    int a[] = {0, 1, 2, 2, 3, 4, 4, 3};
+    root = CreateTree(a, 1);
+    isSymmetric(root);
     return 0;
 }
