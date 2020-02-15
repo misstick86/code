@@ -38,7 +38,7 @@ typedef struct TreeNode
 TreeNode *createTree(int *nodelist, int i)
 {
     TreeNode *new;
-    if (nodelist[i] == 0 || i > 4)
+    if (nodelist[i] == 2 || i > 7)
     {
         return NULL;
     }
@@ -51,9 +51,33 @@ TreeNode *createTree(int *nodelist, int i)
         return new;
     }
 }
+void leafNode(struct TreeNode *root, int n, int *sum)
+{
+    if (root != NULL && root->left == NULL && root->right == NULL)
+    {
+        (*sum) += n * 2 + root->val;
+    }
+    else
+    {
+        if (root->left)
+            leafNode(root->left, (n * 2 + root->val), sum);
+        if (root->right)
+            leafNode(root->right, (n * 2 + root->val), sum);
+    }
+}
 
+int sumRootToLeaf(struct TreeNode *root)
+{
+    int sum = 0;
+    leafNode(root, 0, &sum);
+    printf("%d", sum);
+    return sum;
+}
 int main()
 {
-
+    struct TreeNode *root;
+    int a[] = {0, 1, 0, 1, 0, 1, 0, 1};
+    root = createTree(a, 1);
+    sumRootToLeaf(root);
     return 0;
 }
