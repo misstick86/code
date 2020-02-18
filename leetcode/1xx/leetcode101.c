@@ -52,14 +52,31 @@ struct TreeNode *CreateTree(int *nodelist, int i)
         return new;
     }
 }
+bool isEqule(struct TreeNode *left, struct TreeNode *right)
+{
+    bool flag = true;
+    if (left != NULL && right != NULL)
+    {
+        if (left->val != right->val)
+            flag = false;
+        flag = flag && isEqule(left->left, right->right);
+        flag = flag && isEqule(left->right, right->left);
+    }
+    if (left == NULL && right != NULL || left != NULL && right == NULL)
+        flag = false;
+    return flag;
+}
 bool isSymmetric(struct TreeNode *root)
 {
+    if (root == NULL)
+        return true;
+    return isEqule(root->left, root->right);
 }
 int main()
 {
     struct TreeNode *root;
-    int a[] = {0, 1, 2, 2, 3, 4, 4, 3};
+    int a[] = {0, 1, 2, 2, 0, 3, 0, 3};
     root = CreateTree(a, 1);
-    isSymmetric(root);
+    printf("%d", isSymmetric(root));
     return 0;
 }
