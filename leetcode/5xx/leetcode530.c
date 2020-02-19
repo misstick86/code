@@ -72,22 +72,50 @@ void getNodeValue(struct TreeNode *root, int *min)
         }
     }
 }
-
+void getLeftRightMinValue(struct TreeNode *root, int *min)
+{
+    struct TreeNode *leftnode, *rightnode;
+    if (root != NULL)
+    {
+        if (root->left)
+        {
+            leftnode = root->left;
+            while (leftnode->right)
+            {
+                leftnode = leftnode->right;
+            }
+            *min = *min < abs(root->val - leftnode->val) ? *min : abs(root->val - leftnode->val);
+        }
+        if (root->right)
+        {
+            rightnode = root->right;
+            while (rightnode->left)
+            {
+                rightnode = rightnode->left;
+            }
+            *min = *min < abs(root->val - rightnode->val) ? *min : abs(root->val - rightnode->val);
+        }
+        getLeftRightMinValue(root->left, min);
+        getLeftRightMinValue(root->right, min);
+    }
+}
 int getMinimumDifference(struct TreeNode *root)
 {
     int min = 100000;
+    // 节点中任意两个相邻节点的最小值
     getNodeValue(root, &min);
+    // 根节点左右节点的最大值
+    getLeftRightMinValue(root, &min);
     return min;
 }
 int main()
 {
     struct TreeNode *root = NULL;
-    int a[] = {1, 3, 2};
-    for (int i = 0; i < 3; i++)
+    int a[] = {2, 4443, 1329, 2917, 4406};
+    for (int i = 0; i < 5; i++)
     {
         insertNode(&root, a[i]);
     }
     printf("%d", getMinimumDifference(root));
-
     return 0;
 }
