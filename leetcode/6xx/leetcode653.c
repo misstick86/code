@@ -62,38 +62,29 @@ void insterNode(struct TreeNode **t, int x)
     }
 }
 
-bool searchValue(struct TreeNode *root, int x)
+void Inorder(struct TreeNode *root, int *p, int *i)
 {
-    if (root == NULL)
+
+    if (root)
     {
-        return false;
-    }
-    if (root->val > x)
-    {
-        return searchValue(root->left, x);
-    }
-    else if (root->val < x)
-    {
-        return searchValue(root->right, x);
-    }
-    else
-    {
-        return true;
+        Inorder(root->left, p, i);
+        p[(*i)++] = root->val;
+        Inorder(root->right, p, i);
     }
 }
 
 bool findTarget(struct TreeNode *root, int k)
 {
-    bool flag = false;
-    if (root != NULL)
-    {
-        int search = k - root->val;
-        if (!flag)
-            flag = flag || findTarget(root->left, k);
-        if (!flag)
-            flag = flag || findTarget(root->right, k);
-    }
-    return flag;
+    int node[102400] = {};
+    int count = 0;
+    Inorder(root, node, &count);
+    for (int i = 0; i < count; i++)
+        for (int j = i + 1; j < count; j++)
+        {
+            if (node[i] + node[j] == k)
+                return true;
+        }
+    return false;
 }
 int main()
 {
