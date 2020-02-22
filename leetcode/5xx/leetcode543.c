@@ -31,7 +31,7 @@ typedef struct TreeNode
 TreeNode *createTree(int *nodelist, int i)
 {
     TreeNode *new;
-    if (nodelist[i] == 0 || i > 9)
+    if (nodelist[i] == 0 || i > 5)
     {
         return NULL;
     }
@@ -58,23 +58,34 @@ int getMaxDepth(struct TreeNode *root)
         return left > right ? left : right;
     }
 }
+void getNodeMax(struct TreeNode *root, int *max)
+{
+    int left = 0, rigth = 0;
+    if (root)
+    {
+        if (root->left)
+            left = getMaxDepth(root->left);
+        if (root->right)
+            rigth = getMaxDepth(root->right);
+        *max = *max > rigth + left ? *max : rigth + left;
+        getNodeMax(root->left, max);
+        getNodeMax(root->right, max);
+    }
+}
 
 int diameterOfBinaryTree(struct TreeNode *root)
 {
-    int left = 0, rigth = 0;
+    int max = 0;
     if (root == NULL)
         return 0;
-    if (root->left)
-        left = getMaxDepth(root->left);
-    if (root->right)
-        rigth = getMaxDepth(root->right);
-    return left + rigth;
+    getNodeMax(root, &max);
+    return max;
 }
 
 int main()
 {
     TreeNode *root;
-    int a[] = {0, 4, -7, -3, 0, 0, -9, -3, 9, -7, -4, 0, 6, 0, -6, -6, 0, 0, 0, 6, 5, 0, 9, 0, 0, -1, -4, 0, 0, 0, -2};
+    int a[] = {0, 1, 2, 3, 4, 5};
     root = createTree(a, 1);
     printf("%d", diameterOfBinaryTree(root));
     return 0;
