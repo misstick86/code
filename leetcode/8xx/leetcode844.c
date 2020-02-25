@@ -40,14 +40,98 @@ S 和 T 只含有小写字母以及字符 '#'。
 
 #include <stdio.h>
 #include <malloc.h>
+#include <stdbool.h>
+
 typedef struct StackNode
 {
     char val;
     struct StackNode *next;
 } StackNode;
 
+bool Empty(StackNode *p)
+{
+    return p == NULL;
+}
+
+StackNode *InitStack(StackNode *p)
+{
+    p = NULL;
+    return p;
+}
+
+StackNode *Push(StackNode *p, char x)
+{
+    StackNode *new;
+    new = (StackNode *)malloc(sizeof(StackNode));
+    new->val = x;
+    if (p == NULL)
+    {
+        new->next = NULL;
+        return new;
+    }
+    else
+    {
+        new->next = p;
+        p = new;
+        return p;
+    }
+}
+
+StackNode *Pop(StackNode *p)
+{
+    if (!Empty(p))
+    {
+        StackNode *q;
+        q = p;
+        p = p->next;
+        free(q);
+        q = NULL;
+    }
+    return p;
+}
+
+void getTopValue(StackNode *p, char *x)
+{
+    if (!Empty(p))
+        *x = p->val;
+}
+bool backspaceCompare(char *S, char *T)
+{
+    char s, t;
+    StackNode *st_s, *st_t;
+    st_s = InitStack(st_s);
+    st_t = InitStack(st_t);
+    while (*S != '\0')
+    {
+        if (*S != '#')
+            st_s = Push(st_s, *S);
+        else
+            st_s = Pop(st_s);
+        S++;
+    }
+    while (*T != '\0')
+    {
+        if (*T != '#')
+            st_t = Push(st_t, *T);
+        else
+            st_t = Pop(st_t);
+        T++;
+    }
+    while (st_t != NULL && st_s != NULL)
+    {
+        getTopValue(st_s, &s);
+        getTopValue(st_t, &t);
+        if (s != t)
+            return false;
+        st_s = Pop(st_s);
+        st_t = Pop(st_t);
+    }
+    return st_s == st_t;
+}
 int main()
 {
-
+    char *S = "a##c";
+    char *T = "#a#c";
+    printf("%d", backspaceCompare(S, T));
     return 0;
 }
