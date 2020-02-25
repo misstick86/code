@@ -44,7 +44,7 @@ typedef struct TreeNode
 TreeNode *createTree(int *nodelist, int i)
 {
     TreeNode *new;
-    if (nodelist[i] == 0 || i > 7)
+    if (nodelist[i] == 0 || i > 21)
     {
         return NULL;
     }
@@ -57,33 +57,62 @@ TreeNode *createTree(int *nodelist, int i)
         return new;
     }
 }
+
+void getNodeMin(struct TreeNode *root, int *second, int k)
+{
+    if (root)
+    {
+        if (root->val >= *second)
+        {
+            *second = root->val;
+        }
+        if (root->val > k && root->val > *second)
+        {
+            *second = root->val;
+        }
+        getNodeMin(root->left, second, k);
+        getNodeMin(root->right, second, k);
+    }
+}
+
+void getMin(struct TreeNode *root, int *min)
+{
+    int minValue = 0, maxValue = 0;
+    int left = root->left->val, right = root->right->val;
+    if (left == root->val)
+        getNodeMin(root->left, &left, root->val);
+    if (right == root->val)
+        getNodeMin(root->right, &right, root->val);
+    minValue = left < right ? left : right;
+    maxValue = left > right ? left : right;
+    if (*min < minValue)
+    {
+        *min = minValue;
+    }
+    else if (*min == minValue)
+    {
+        if (*min == maxValue)
+        {
+            *min = -1;
+        }
+        else
+        {
+            *min = maxValue;
+        }
+    }
+}
+
 int findSecondMinimumValue(struct TreeNode *root)
 {
-    int min = -1;
-    int leftmin = -1, rightmin = -1;
-    if (root->left)
-    {
-        leftmin = root->left->val;
-    }
-    if (root->right)
-    {
-        rightmin = root->right->val;
-    }
-    min = leftmin <= rightmin ? leftmin : rightmin;
-    if (min == root->val)
-    {
-        leftmin = findSecondMinimumValue(root->left);
-        rightmin = findSecondMinimumValue(root->right);
-    }
-    else
-    {
-        return min;
-    }
+    int min = root->val;
+    getMin(root, &min);
+    printf("%d", min);
+    return min;
 }
 int main()
 {
     TreeNode *root;
-    int node[] = {0, 2, 2, 5, 0, 0, 5, 7};
+    int node[] = {0, 1, 1, 3, 1, 1, 3, 4, 3, 1, 1, 1, 3, 8, 4, 8, 3, 3, 1, 6, 2, 1};
     root = createTree(node, 1);
     findSecondMinimumValue(root);
     return 0;
