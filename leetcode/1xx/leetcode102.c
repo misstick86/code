@@ -96,65 +96,52 @@ int **levelOrder(struct TreeNode *root, int *returnSize, int **returnColumnSizes
     // returnSize 为总共有多少行数据， 也就是数据的最大深度，
     // returnColumnSizes 为每行中数据的个数,也就是树的每一层有多少个。
     int **result; //返回结果
-    int length;   //树的最大深度
+    int depth;    //树的最大深度
     // 获取树的最大深度
-    length = GetTreeDepth(root);
-    *returnSize = length;
-    result = (int **)malloc(sizeof(int) * length);
-    for (int c = 0; c < length; c++)
-    {
-        result[c] = (int *)malloc(sizeof(int) * 100);
-    }
-    // *returnColumnSizes = (int *)malloc(sizeof(int) * length);
+    depth = GetTreeDepth(root);
+    *returnSize = 0;
+    result = (int **)malloc(sizeof(int *) * depth);
+    returnColumnSizes[0] = (int *)malloc(sizeof(int) * depth);
     if (root != NULL)
     {
-        int i = 0, j = 0;
+        int size = 0;
         struct TreeNode *p;
         QueueNode queue;
-
         InitQueue(&queue);
         PushQ(&queue, root);
         while (!Empty(&queue))
         {
-            p = GetQueueValue(&queue);
-            PopQ(&queue);
-            if (Empty(&queue))
+            int i = 0;
+            size = queue.last - queue.first;
+            returnColumnSizes[0][*returnSize] = size;
+            result[(*returnSize)++] = (int *)malloc(sizeof(int) * size);
+            while (size--)
             {
-                result[i][j] = p->val;
-                // *returnColumnSizes = j;
-                i++;
-                j = 0;
-            }
-            else
-            {
-                result[i][j] = p->val;
-                j++;
-            }
-
-            if (p->left)
-            {
-                PushQ(&queue, p->left);
-            }
-            if (p->right)
-            {
-                PushQ(&queue, p->right);
+                p = GetQueueValue(&queue);
+                PopQ(&queue);
+                result[(*returnSize) - 1][i++] = p->val;
+                if (p->left)
+                    PushQ(&queue, p->left);
+                if (p->right)
+                {
+                    PushQ(&queue, p->right);
+                }
             }
         }
     }
     else
     {
         *returnSize = 0;
-        returnColumnSizes = 0;
     }
     return result;
 }
 int main()
 {
-    int **p;
+    int *p = NULL;
     int size;
     int a[] = {0, 3, 9, 20, 0, 0, 15, 7};
     struct TreeNode *root;
     root = createTree(a, 1);
-    levelOrder(root, &size, p);
+    levelOrder(root, &size, &p);
     return 0;
 }
