@@ -1,14 +1,41 @@
 /*
-@File    :   leetcode257.c
-@Time    :   2020/02/21 18:11:14
+@File    :   leetcode230.c
+@Time    :   2020/02/28 10:40:07
 @Author  :   xiaosongsong
 @Desc    :   None
+给定一个二叉搜索树，编写一个函数 kthSmallest 来查找其中第 k 个最小的元素。
+
+说明：
+你可以假设 k 总是有效的，1 ≤ k ≤ 二叉搜索树元素个数。
+
+示例 1:
+
+输入: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+输出: 1
+示例 2:
+
+输入: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+输出: 3
+进阶：
+如果二叉搜索树经常被修改（插入/删除操作）并且你需要频繁地查找第 k 小的值，你将如何优化 kthSmallest 函数？
+
 */
 
 #include <stdio.h>
 #include <malloc.h>
 #include <stdbool.h>
-#include <string.h>
 typedef struct TreeNode
 {
     int val;
@@ -84,75 +111,41 @@ void getTopValue(TreeStack *st, struct TreeNode **val)
     *val = st->val;
 }
 
-char **binaryTreePaths(struct TreeNode *root, int *returnSize)
+int kthSmallest(struct TreeNode *root, int k)
 {
-    char **result;
     int i = 0;
-    char *re;
-    re = (char *)malloc(sizeof(char *) * 1024);
-    (result) = (char **)malloc(sizeof(char) * 1024);
-    struct TreeNode *p;
     TreeStack *st;
-    st = initStack(st);
-    *returnSize = 0;
+    struct TreeNode *p;
     if (root == NULL)
     {
-
-        return NULL;
+        return 0;
     }
+    st = initStack(st);
     st = Push(st, root);
-    re[i++] = root->val + '0';
     while (!Empty(st))
     {
         while (root && root->left)
         {
             st = Push(st, root->left);
             root = root->left;
-            re[i++] = root->val + '0';
         }
-
         getTopValue(st, &p);
         st = Pop(st);
-        if (Empty(st))
-        {
-            i = 1;
-        }
-        if (p->left == NULL && p->right == NULL)
-        {
-            result[*returnSize] = (char *)malloc(sizeof(char) * (i));
-            strncpy(result[(*returnSize)], re, i);
-            // for (int j = 0; j < i; j++)
-            // {
-            //     result[(*returnSize)][j] = re[j];
-            // }
-            result[(*returnSize)++][i] = '\0';
-        }
-        // printf("%d,", p->val);
-
+        i++;
+        if (i == k)
+            return p->val;
         if (p->right)
         {
             st = Push(st, p->right);
-            re[i++] = p->right->val + '0';
             root = p->right;
         }
-        else
-        {
-            i--;
-        }
     }
-    for (int i = 0; i < 3; i++)
-    {
-        printf("%s,", result[i]);
-    }
-
-    return result;
 }
 int main()
 {
-    int size = 0;
     TreeNode *root;
-    int node[] = {0, 1, 2, 3, 4, 5, 0, 0, 7};
+    int node[] = {0, 5, 3, 6, 2, 4, 0, 0, 1};
     root = createTree(node, 1);
-    binaryTreePaths(root, &size);
+    printf("%d", kthSmallest(root, 6));
     return 0;
 }
