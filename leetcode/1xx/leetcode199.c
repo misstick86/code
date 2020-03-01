@@ -22,16 +22,19 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include <stdbool.h>
+#define MaxSize 1024
 typedef struct TreeNode
 {
     int val;
     struct TreeNode *left;
     struct TreeNode *right;
 } TreeNode;
+
 TreeNode *createBtTree(int *nodelist, int i)
 {
     TreeNode *newnode;
-    if (nodelist[i] == 0 || i > 10)
+    if (nodelist[i] == 0 || i > 7)
         return NULL;
     else
     {
@@ -42,28 +45,83 @@ TreeNode *createBtTree(int *nodelist, int i)
         return newnode;
     }
 }
-int getMaxDepth(struct TreeNode *root)
+
+typedef struct TreeQueue
+{
+    struct TreeNode *val[MaxSize];
+    int first;
+    int last;
+} TreeQueue;
+bool Empty(TreeQueue *q)
+{
+    return q->first == q->last;
+}
+bool Full(TreeQueue *q)
+{
+    return q->first > MaxSize;
+}
+void initQueue(TreeQueue *q)
+{
+    q->first = q->last = 0;
+}
+void PushQueue(TreeQueue *q, struct TreeNode *x)
+{
+    if (!Full(q))
+    {
+        q->val[q->first++] = x;
+    }
+}
+void PopQueue(TreeQueue *q, struct TreeNode **x)
+{
+    if (!Empty(q))
+    {
+        *x = q->val[q->last++];
+    }
+}
+
+int getDepth(struct TreeNode *root)
 {
     int left = 0, right = 0;
     if (root)
     {
-        left = getMaxDepth(root->left) + 1;
-        right = getMaxDepth(root->right) + 1;
+        left = getDepth(root->left) + 1;
+        right = getDepth(root->right) + 1;
     }
     return left > right ? left : right;
 }
 int *rightSideView(struct TreeNode *root, int *returnSize)
 {
+    struct TreeNode *p;
+    TreeQueue queue;
     int *result;
-    int left = 0, right = 0;
-    left = getMaxDepth(root->left);
-    right = getMaxDepth(root->right);
+    int size = 0, depth = 0;
+    depth = getDepth(root);
+    result = (int *)malloc(sizeof(int) * depth);
+    *returnSize = 0;
+    initQueue(&queue);
+    PushQueue(&queue, root);
+    if (root == NULL)
+        return result;
+    while (!Empty(&queue))
+    {
+        size = queue.first - queue.last;
+        while (size--)
+        {
+            PopQueue(&queue, &p);
+            if (p->left)
+                PushQueue(&queue, p->left);
+            if (p->right)
+                PushQueue(&queue, p->right);
+        }
+        result[(*returnSize)++] = p->val;
+    }
+    return result;
 }
 int main()
 {
     int size = 0;
     TreeNode *root;
-    int a[] = {0, 1, 2, 3, 0, 5, 0, 4, 0, 0, 7};
+    int a[] = {0, 1, 2, 3, 0, 5, 0, 4};
     root = createBtTree(a, 1);
     rightSideView(root, &size);
     return 0;
