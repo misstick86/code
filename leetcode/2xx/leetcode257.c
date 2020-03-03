@@ -9,6 +9,11 @@
 #include <malloc.h>
 #include <stdbool.h>
 #include <string.h>
+typedef enum
+{
+    L,
+    R
+} Tag;
 typedef struct TreeNode
 {
     int val;
@@ -16,11 +21,16 @@ typedef struct TreeNode
     struct TreeNode *right;
 } TreeNode;
 
+typedef struct TreeNodeTag
+{
+    struct TreeNode *ptr;
+    Tag tag;
+} TreeNodeTag;
+
 typedef struct TreeStack
 {
-    struct TreeNode *val;
+    TreeNodeTag val;
     struct TreeStack *next;
-    int count;
 } TreeStack;
 
 TreeNode *createTree(int *nodelist, int i)
@@ -50,12 +60,11 @@ bool Empty(TreeStack *p)
     return p == NULL;
 }
 
-TreeStack *Push(TreeStack *st, struct TreeNode *val)
+TreeStack *Push(TreeStack *st, TreeNodeTag val)
 {
     TreeStack *new;
     new = (TreeStack *)malloc(sizeof(TreeStack));
     new->val = val;
-    new->count++;
     if (st == NULL)
     {
         new->next = NULL;
@@ -79,71 +88,76 @@ TreeStack *Pop(TreeStack *st)
     return st;
 }
 
-void getTopValue(TreeStack *st, struct TreeNode **val)
+void getTopValue(TreeStack *st, TreeNodeTag *val)
 {
     *val = st->val;
 }
 
 char **binaryTreePaths(struct TreeNode *root, int *returnSize)
 {
-    char **result;
-    int i = 0;
-    char *re;
-    re = (char *)malloc(sizeof(char *) * 1024);
-    (result) = (char **)malloc(sizeof(char) * 1024);
-    struct TreeNode *p;
-    TreeStack *st;
-    st = initStack(st);
     *returnSize = 0;
     if (root == NULL)
     {
-
         return NULL;
     }
-    st = Push(st, root);
-    re[i++] = root->val + '0';
-    while (!Empty(st))
+    char **result;
+    int i = 0;
+    int *re;
+    re = (int *)malloc(sizeof(int *) * 1024);
+    result = (char **)malloc(sizeof(char *) * 1024);
+    TreeNodeTag treetag, p;
+    TreeStack *st;
+    st = initStack(st);
+    do
     {
-        while (root && root->left)
+        while (root)
         {
-            st = Push(st, root->left);
+            treetag.ptr = root;
+            treetag.tag = L;
+            st = Push(st, treetag);
+            re[i++] = root->val;
             root = root->left;
-            re[i++] = root->val + '0';
         }
-
         getTopValue(st, &p);
         st = Pop(st);
-        if (Empty(st))
+        switch (p.tag)
         {
-            i = 1;
-        }
-        if (p->left == NULL && p->right == NULL)
-        {
-            result[*returnSize] = (char *)malloc(sizeof(char) * (i));
-            strncpy(result[(*returnSize)], re, i);
-            // for (int j = 0; j < i; j++)
-            // {
-            //     result[(*returnSize)][j] = re[j];
-            // }
-            result[(*returnSize)++][i] = '\0';
-        }
-        // printf("%d,", p->val);
-
-        if (p->right)
-        {
-            st = Push(st, p->right);
-            re[i++] = p->right->val + '0';
-            root = p->right;
-        }
-        else
-        {
+        case L:
+            p.tag = R;
+            st = Push(st, p);
+            root = p.ptr->right;
+            break;
+        case R:
+            if (p.ptr->left == NULL && p.ptr->right == NULL)
+            {
+                int count = 0;
+                // printf("%d,", p.ptr->val);
+                result[*returnSize] = (char *)malloc(sizeof(char) * (1024));
+                char temp[1024];
+                for (int j = 0; j < i; j++)
+                {
+                    sprintf(temp, "%d->", re[j]);
+                    printf("%s\n", temp);
+                    for (int k = 0; temp[k] != '>'; k++)
+                        result[(*returnSize)][count++] = temp[k];
+                    // strcat(result[*returnSize], temp);
+                    result[(*returnSize)][count++] = '>';
+                }
+                result[(*returnSize)++][count - 2] = '\0';
+            }
             i--;
+            break;
+
+        default:
+            break;
         }
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        printf("%s,", result[i]);
-    }
+
+    } while (!Empty(st));
+
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     printf("%s\n", result[i]);
+    // }
 
     return result;
 }
@@ -151,7 +165,7 @@ int main()
 {
     int size = 0;
     TreeNode *root;
-    int node[] = {0, 1, 2, 3, 4, 5, 0, 0, 7};
+    int node[] = {0, 37, -34, -48, 0, -100, -100, 48};
     root = createTree(node, 1);
     binaryTreePaths(root, &size);
     return 0;
