@@ -30,6 +30,11 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdbool.h>
+typedef enum
+{
+    L,
+    R
+} Tag;
 typedef struct TreeNode
 {
     int val;
@@ -37,11 +42,16 @@ typedef struct TreeNode
     struct TreeNode *right;
 } TreeNode;
 
+typedef struct TreeNodeTag
+{
+    struct TreeNode *ptr;
+    Tag tag;
+} TreeNodeTag;
+
 typedef struct TreeStack
 {
-    struct TreeNode *val;
+    TreeNodeTag val;
     struct TreeStack *next;
-    int count;
 } TreeStack;
 TreeNode *createTree(int *nodelist, int i)
 {
@@ -69,20 +79,18 @@ bool Empty(TreeStack *p)
     return p == NULL;
 }
 
-TreeStack *Push(TreeStack *st, struct TreeNode *val)
+TreeStack *Push(TreeStack *st, TreeNodeTag val)
 {
     TreeStack *new;
     new = (TreeStack *)malloc(sizeof(TreeStack));
     new->val = val;
     if (st == NULL)
     {
-        new->count = val->val;
         new->next = NULL;
         return new;
     }
     else
     {
-        new->count = st->count + val->val;
         new->next = st;
         st = new;
         return st;
@@ -98,51 +106,78 @@ TreeStack *Pop(TreeStack *st)
     return st;
 }
 
-void getTopValue(TreeStack *st, struct TreeNode **val)
+void getTopValue(TreeStack *st, TreeNodeTag *val)
 {
     *val = st->val;
 }
 int **pathSum(struct TreeNode *root, int sum, int *returnSize, int **returnColumnSizes)
 {
     int **result;
-    int temp[1024] = {};
-    TreeStack *st;
-    struct TreeNode *p;
-    st = initStack(st);
-    st = Push(st, root);
-    temp[0] = root->val;
     *returnSize = 0;
     result = (int **)malloc(sizeof(int *) * 1024);
-    int i = 1;
-    while (!Empty(st))
+    returnColumnSizes[0] = (int *)malloc(sizeof(int) * 1024);
+    if (root)
     {
-        while (root && root->left)
+        TreeNodeTag nodetag, p;
+        int temp[1024] = {};
+        TreeStack *st;
+        st = initStack(st);
+        int i = 0;
+        do
         {
-
-            st = Push(st, root->left);
-            root = root->left;
-            temp[i++] = root->val;
-        }
-        getTopValue(st, &p);
-        st = Pop(st);
-        i--;
-        if (p->left == NULL && p->right == NULL && st->count + p->val == sum)
-        {
-            result[(*returnSize)++] = (int *)malloc(sizeof(int) * st->count);
-            for (int j = 0; j < i; j++)
+            while (root)
             {
-                result[(*returnSize) - 1][j] = temp[i];
+                nodetag.ptr = root;
+                nodetag.tag = L;
+                st = Push(st, nodetag);
+                temp[i++] = root->val;
+                sum -= root->val;
+                root = root->left;
             }
-        }
+            getTopValue(st, &p);
+            st = Pop(st);
+            switch (p.tag)
+            {
+            case L:
+                p.tag = R;
+                st = Push(st, p);
+                root = p.ptr->right;
+                break;
+            case R:
+                /* code */
+                if (p.ptr->left == NULL && p.ptr->right == NULL && sum == 0)
+                {
+                    result[(*returnSize)++] = (int *)malloc(sizeof(int) * i);
+                    returnColumnSizes[0][(*returnSize) - 1] = i;
+                    for (int j = 0; j < i; j++)
+                        result[(*returnSize) - 1][j] = temp[j];
+                }
+                sum += p.ptr->val;
+                i--;
+                break;
 
-        if (p->right)
-        {
-            st = Push(st, p->right);
-            st->count += p->val;
-            root = p->right;
-            temp[i++] = root->val;
-        }
+            default:
+                break;
+            }
+
+        } while (!Empty(st));
     }
+    for (int i = 0; i < 3; i++)
+    {
+        /* code */
+        printf("%d,", returnColumnSizes[0][i]);
+    }
+
+    // for (int i = 0; i < 2; i++)
+    // {
+    //     for (int j = 0; j < 4; j++)
+    //     {
+    //         printf("%d,", result[i][j]);
+    //     }
+    //     printf("\n");
+    // }
+
+    return result;
 }
 int main()
 {
