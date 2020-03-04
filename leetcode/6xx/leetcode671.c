@@ -58,62 +58,43 @@ TreeNode *createTree(int *nodelist, int i)
     }
 }
 
-void getNodeMin(struct TreeNode *root, int *second, int k)
+void findMin(struct TreeNode *root, int x, int *min)
+{
+
+    if (root)
+    {
+        findMin(root->left, x, min);
+        findMin(root->right, x, min);
+        if (root->val > x && root->val < *min)
+            *min = root->val;
+    }
+}
+void getNodeMax(struct TreeNode *root, int *max)
 {
     if (root)
     {
-        if (root->val >= *second)
-        {
-            *second = root->val;
-        }
-        if (root->val > k && root->val > *second)
-        {
-            *second = root->val;
-        }
-        getNodeMin(root->left, second, k);
-        getNodeMin(root->right, second, k);
+        getNodeMax(root->left, max);
+        getNodeMax(root->right, max);
+        if (*max < root->val)
+            *max = root->val;
     }
 }
-
-void getMin(struct TreeNode *root, int *min)
-{
-    int minValue = 0, maxValue = 0;
-    int left = root->left->val, right = root->right->val;
-    if (left == root->val)
-        getNodeMin(root->left, &left, root->val);
-    if (right == root->val)
-        getNodeMin(root->right, &right, root->val);
-    minValue = left < right ? left : right;
-    maxValue = left > right ? left : right;
-    if (*min < minValue)
-    {
-        *min = minValue;
-    }
-    else if (*min == minValue)
-    {
-        if (*min == maxValue)
-        {
-            *min = -1;
-        }
-        else
-        {
-            *min = maxValue;
-        }
-    }
-}
-
 int findSecondMinimumValue(struct TreeNode *root)
 {
     int min = root->val;
-    getMin(root, &min);
-    printf("%d", min);
+    getNodeMax(root, &min);
+    if (min == root->val)
+        return -1;
+    findMin(root->left, root->val, &min);
+    findMin(root->right, root->val, &min);
     return min;
 }
 int main()
 {
     TreeNode *root;
-    int node[] = {0, 1, 1, 3, 1, 1, 3, 4, 3, 1, 1, 1, 3, 8, 4, 8, 3, 3, 1, 6, 2, 1};
+    int node[] = {0, 1, 1, 3, 1, 1, 3, 4, 3, 1, 1, 1, 3, 8, 4, 8, 3, 3, 2, 6, 4, 1};
+    // int node[] = {0, 2, 2, 2};
     root = createTree(node, 1);
-    findSecondMinimumValue(root);
+    printf("%d", findSecondMinimumValue(root));
     return 0;
 }
