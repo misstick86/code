@@ -55,30 +55,47 @@ struct ListNode *createList(int *node, int n)
 }
 struct TreeNode *sortedListToBST(struct ListNode *head)
 {
+    int count = 0;
     struct TreeNode *new;
-    struct ListNode *first, *last, *pre;
-    first = head->next->next;
-    last = head->next;
-
-    while (first)
+    struct ListNode *first, *last;
+    first = head;
+    last = head;
+    if (head == NULL)
+        return NULL;
+    if (head->next == NULL)
     {
+        new = (struct TreeNode *)malloc(sizeof(struct TreeNode));
+        new->val = last->val;
+        new->left = NULL;
+        new->right = NULL;
+        return new;
+    }
+    while (first && first->next)
+    {
+        count++;
         first = first->next->next;
-        pre = last;
         last = last->next;
     }
     first = last->next;
     new = (struct TreeNode *)malloc(sizeof(struct TreeNode));
     new->val = last->val;
-    pre->next = NULL;
+    last = head;
+    while (--count > 0)
+    {
+        last = last->next;
+    }
+    last->next = NULL;
+
     new->left = sortedListToBST(head);
     new->right = sortedListToBST(first);
     return new;
 }
 int main()
 {
+    struct TreeNode *root;
     struct ListNode *head;
     int node[] = {-10, -3, 0, 5, 9};
     head = createList(node, 5);
-    sortedListToBST(head);
+    root = sortedListToBST(head);
     return 0;
 }
