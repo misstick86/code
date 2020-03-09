@@ -54,13 +54,24 @@ ListNode *create()
 
 void reorderList(struct ListNode *head)
 {
-    struct ListNode *p;
+    struct ListNode *p, *temp, *newhead, *pre = NULL;
+    newhead = head;
     p = head;
-    while (head)
+    while (p)
     {
-        printf("%d", head->val);
+        temp = p;
+        p = p->next;
+        temp->next = pre;
+        pre = temp;
+    }
+    temp = head;
+    while (temp != pre)
+    {
+        head = temp;
+        head->next = pre;
         head = head->next;
-        /* code */
+        temp = temp->next;
+        pre = pre->next;
     }
 }
 int main()
