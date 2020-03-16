@@ -65,14 +65,7 @@ void reorderList(struct ListNode *head)
         pre = temp;
     }
     temp = head;
-    while (temp != pre)
-    {
-        head = temp;
-        head->next = pre;
-        head = head->next;
-        temp = temp->next;
-        pre = pre->next;
-    }
+
 }
 int main()
 {
