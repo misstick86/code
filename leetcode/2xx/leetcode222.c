@@ -34,7 +34,7 @@ typedef struct TreeNode
 TreeNode *createBtTree(int *nodelist, int i)
 {
     TreeNode *newnode;
-    if (nodelist[i] == 0 || i > 10)
+    if (nodelist[i] == 0 || i > 6)
         return NULL;
     else
     {
@@ -45,27 +45,35 @@ TreeNode *createBtTree(int *nodelist, int i)
         return newnode;
     }
 }
-
-void getCount(struct TreeNode *root, int depth, int *sum)
+int getMaxDepth(struct TreeNode *root)
 {
-    *sum += 1 << depth;
-    // if (root->right == NULL)
-    // {
-    //     *sum -=
-    // }
-    root = root->left;
+    int left = 0, right = 0;
+    if (root == NULL)
+        return 0;
+    left = getMaxDepth(root->left) + 1;
+    right = getMaxDepth(root->right) + 1;
+    return left > right ? left : right;
 }
+
 int countNodes(struct TreeNode *root)
 {
+    int left = 0, right = 0;
     int count = 0;
-    getCount(root, 0, &count);
+    if (root == NULL)
+        return 0;
+    left = getMaxDepth(root->left);
+    right = getMaxDepth(root->right);
+    if (left == right)
+        return (1 << left) + countNodes(root->right);
+    else
+        return (1 << right) + countNodes(root->left);
 }
 int main()
 {
     int size = 0;
     TreeNode *root;
-    int a[] = {0, 1, 2, 3, 5, 5, 3, 4, 2, 1, 7};
+    int a[] = {0, 1, 2, 3, 4, 5, 6};
     root = createBtTree(a, 1);
-    countNodes(root);
+    printf("%d", countNodes(root));
     return 0;
 }

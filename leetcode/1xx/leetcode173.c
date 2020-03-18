@@ -26,7 +26,6 @@ typedef struct BSTIterator
 void initStack(BSTIterator *st)
 {
     st->top = 0;
-    // st->top = 0;
 }
 //  判断栈空
 bool Empty(BSTIterator *st)
@@ -53,9 +52,9 @@ void Pop(BSTIterator *st)
 }
 
 // 获取栈顶元素
-struct TreeNode *getTopValue(BSTIterator *st)
+void getTopValue(BSTIterator *st, struct TreeNode **p)
 {
-    return st->val[st->top - 1];
+    *p = st->val[st->top - 1];
 }
 
 BSTIterator *bSTIteratorCreate(struct TreeNode *root)
@@ -75,17 +74,18 @@ BSTIterator *bSTIteratorCreate(struct TreeNode *root)
 /** @return the next smallest number */
 int bSTIteratorNext(BSTIterator *obj)
 {
-    struct TreeNode *p1, *q = NULL;
-    p1 = getTopValue(obj);
-    q = p1->right;
+    struct TreeNode *p1;
+    getTopValue(obj, &p1);
+    struct TreeNode *q1;
+    q1 = p1->right;
     Pop(obj);
     if (p1->right)
         Push(obj, p1->right);
-    q = p1->right;
-    while (q && q->left)
+    q1 = p1->right;
+    while (q1 && q1->left)
     {
-        Push(obj, q->left);
-        q = q->left;
+        Push(obj, q1->left);
+        q1 = q1->left;
     }
     return p1->val;
 }
@@ -126,14 +126,14 @@ void insertTree(struct TreeNode **t, int x)
 int main()
 {
     struct TreeNode *root = NULL;
-    BSTIterator *st;
+    BSTIterator *p;
     int node[] = {7, 3, 15, 9, 20};
     int len = (sizeof(node) / sizeof(int));
     for (int i = 0; i < len; i++)
         insertTree(&root, node[i]);
-    st = bSTIteratorCreate(root);
-    printf("%d,", bSTIteratorNext(st));
-    printf("%d,", bSTIteratorNext(st));
+    p = bSTIteratorCreate(root);
+    printf("%d,", bSTIteratorNext(p));
+    printf("%d,", bSTIteratorNext(p));
     // printf("%d,", bSTIteratorHasNext(&st));
     // printf("%d,", bSTIteratorNext(&st));
     // printf("%d,", bSTIteratorHasNext(&st));
