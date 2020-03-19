@@ -40,8 +40,8 @@ ListNode *create()
         Head->val = data;
         Head->next = NULL;
         Pointer = Head;
-        int initdata[3] = {2, 3, 4};
-        for (int i = 0; i < 3; i++)
+        int initdata[6] = {2, 3, 4, 5, 6, 7};
+        for (int i = 0; i < 6; i++)
         {
             New = (ListNode *)malloc(sizeof(struct ListNode));
             New->val = initdata[i];
@@ -54,18 +54,46 @@ ListNode *create()
 
 void reorderList(struct ListNode *head)
 {
-    struct ListNode *p, *temp, *newhead, *pre = NULL;
-    newhead = head;
+    // 1. 获取链表的中间节点
+    struct ListNode *first, *last, *p;
     p = head;
-    while (p)
+    last = p;
+    first = p;
+    while (first && first->next)
     {
-        temp = p;
-        p = p->next;
+        first = first->next->next;
+        last = last->next;
+    }
+    p = head;
+
+    // 2.反转last链表
+
+    struct ListNode *newhead, *temp, *pre = NULL;
+
+    while (last)
+    {
+        temp = last;
+        last = last->next;
         temp->next = pre;
         pre = temp;
     }
-    temp = head;
 
+    // 3.链接前后链表
+    newhead = p;
+    int i = 0;
+    while (p && pre && p != pre)
+    {
+        temp = p->next;
+        newhead->next = p;
+        newhead->next->next = pre;
+        newhead = newhead->next;
+        pre = pre->next;
+        p = temp;
+        if (i++)
+        {
+            newhead = newhead->next;
+        }
+    }
 }
 int main()
 {
