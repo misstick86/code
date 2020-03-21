@@ -26,24 +26,21 @@
 */
 
 #include <stdio.h>
-void rotate(int *nums, int numsSize, int k)
+
+
+void rotate(int *nums1, int numsSize, int k)
 {
-    int next, current;
+    int nums[] = {1, 2, 3, 4, 5, 6, 7};
+    int tmep;
     k = k % numsSize;
+    if (k == 0)
+        return;
     for (int i = 0; i < k; i++)
     {
-        current = nums[i];
-        for (int j = 0; j < numsSize; j += k)
-        {
-            next = nums[(j + k) % numsSize];
-            nums[(j + k) % numsSize] = current;
-            current = next;
-        }
-        for (int b = 0; b < numsSize; b++)
-        {
-            printf("%d,", nums[b]);
-        }
-        printf("\n");
+        tmep = nums[numsSize - 1];
+        for (int j = numsSize - 1; j > 0; j--)
+            nums[j] = nums[j - 1];
+        nums[0] = tmep;
     }
 }
 int main()
