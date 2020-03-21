@@ -3,6 +3,7 @@
 @Time    :   2020/03/20 10:28:24
 @Author  :   xiaosongsong
 @Desc    :   None
+给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
 */
 
 #include <stdio.h>
