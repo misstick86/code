@@ -41,7 +41,7 @@ G 是链表中所有结点的值的一个子集.
 
 #include <stdio.h>
 #include <malloc.h>
-
+#include <stdbool.h>
 typedef struct ListNode
 {
     int val;
@@ -67,20 +67,42 @@ struct ListNode *createList(int *node, int n)
     }
     return root;
 }
+
+bool isEsixt(int *G, int GSize, int q)
+{
+    for (int i = 0; i < GSize; i++)
+        if (G[i] == q)
+            return true;
+    return false;
+}
+
 int numComponents(struct ListNode *head, int *G, int GSize)
 {
     int count = 0;
+    int flag = isEsixt(G, GSize, head->val);
     while (head)
     {
+        while (head && isEsixt(G, GSize, head->val))
+        {
+            head = head->next;
+        }
+        count++;
+        while (head && !isEsixt(G, GSize, head->val))
+        {
+            head = head->next;
+        }
     }
+    if (!flag)
+        return count - 1;
     return count;
 }
 int main()
 {
+
     ListNode *p;
-    int list[] = {1, 2, 3, 4};
-    int G[] = {1};
-    p = createList(list, 4);
-    numComponents(p, G, 1);
+    int list[] = {3, 4, 0, 1, 2};
+    int G[] = {4};
+    p = createList(list, 5);
+    printf("%d", numComponents(p, G, 1));
     return 0;
 }
