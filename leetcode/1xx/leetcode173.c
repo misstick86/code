@@ -48,7 +48,10 @@ void Push(BSTIterator *st, struct TreeNode *x)
 // 出栈
 void Pop(BSTIterator *st)
 {
-    st->val[--st->top] = NULL;
+    if (!Empty(st))
+    {
+        st->val[--st->top] = NULL;
+    }
 }
 
 // 获取栈顶元素
@@ -60,34 +63,34 @@ void getTopValue(BSTIterator *st, struct TreeNode **p)
 BSTIterator *bSTIteratorCreate(struct TreeNode *root)
 {
 
-    BSTIterator st, *p;
-    p = &st;
-    initStack(&st);
+    BSTIterator *st;
+    st = (BSTIterator *)malloc(sizeof(BSTIterator));
+    initStack(st);
     while (root)
     {
-        Push(&st, root);
+        Push(st, root);
         root = root->left;
     }
-    return p;
+    return st;
 }
 
 /** @return the next smallest number */
 int bSTIteratorNext(BSTIterator *obj)
 {
-    struct TreeNode *p1;
-    getTopValue(obj, &p1);
-    struct TreeNode *q1;
-    q1 = p1->right;
+    struct TreeNode *p;
+    getTopValue(obj, &p);
+    struct TreeNode *q;
+    q = p->right;
     Pop(obj);
-    if (p1->right)
-        Push(obj, p1->right);
-    q1 = p1->right;
-    while (q1 && q1->left)
+    if (p->right)
+        Push(obj, p->right);
+    q = p->right;
+    while (q && q->left)
     {
-        Push(obj, q1->left);
-        q1 = q1->left;
+        Push(obj, q->left);
+        q = q->left;
     }
-    return p1->val;
+    return p->val;
 }
 
 /** @return whether we have a next smallest number */
@@ -100,6 +103,7 @@ bool bSTIteratorHasNext(BSTIterator *obj)
 
 void bSTIteratorFree(BSTIterator *obj)
 {
+    free(obj->val);
     free(obj);
     obj = NULL;
 }
@@ -134,12 +138,12 @@ int main()
     p = bSTIteratorCreate(root);
     printf("%d,", bSTIteratorNext(p));
     printf("%d,", bSTIteratorNext(p));
-    // printf("%d,", bSTIteratorHasNext(&st));
-    // printf("%d,", bSTIteratorNext(&st));
-    // printf("%d,", bSTIteratorHasNext(&st));
-    // printf("%d,", bSTIteratorNext(&st));
-    // printf("%d,", bSTIteratorHasNext(&st));
-    // printf("%d,", bSTIteratorNext(&st));
-    // printf("%d,", bSTIteratorHasNext(&st));
+    printf("%d,", bSTIteratorHasNext(p));
+    printf("%d,", bSTIteratorNext(p));
+    printf("%d,", bSTIteratorHasNext(p));
+    printf("%d,", bSTIteratorNext(p));
+    printf("%d,", bSTIteratorHasNext(p));
+    printf("%d,", bSTIteratorNext(p));
+    printf("%d,", bSTIteratorHasNext(p));
     return 0;
 }
