@@ -11,6 +11,42 @@
 
 #include <stdio.h>
 
+void Swap(int *a, int *b)
+{
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int selectSort(int *node, int k, int count)
+{
+    int pos = k;
+    int min = node[k];
+    for (int i = k + 1; i < count; i++)
+        if (node[i] < min)
+        {
+            min = node[i];
+            pos = i;
+        }
+    return pos;
+}
+int main(int argc, char const *argv[])
+{
+    int node[] = {70, 81, 59, 8, 2, 21, 92, 34, 13, 76};
+    int count = sizeof(node) / sizeof(int);
+    for (int i = 0; i < count; i++)
+    {
+        int j = selectSort(node, i, count);
+        if (j != i)
+            Swap(&node[i], &node[j]);
+    }
+    for (int i = 0; i < count; i++)
+    {
+        printf("%d,", node[i]);
+    }
+}
+
+/*
 int main()
 {
     int node[] = {70, 81, 59, 8, 2, 21, 92, 34, 13, 76};
@@ -40,3 +76,5 @@ int main()
     }
     return 0;
 }
+
+*/
