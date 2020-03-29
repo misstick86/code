@@ -28,12 +28,25 @@ nums 的每个元素都将在 [-9999, 9999]之间。
 */
 
 #include <stdio.h>
+
+int halfSearch(int *nums, int first, int last, int target)
+{
+    int pos = (first + last) / 2;
+    if (nums[pos] == target)
+        return pos;
+    if (last <= first)
+        return -1;
+    if (nums[pos] > target)
+        return halfSearch(nums, first, pos - 1, target);
+    return halfSearch(nums, pos + 1, last, target);
+}
 int search(int *nums, int numsSize, int target)
 {
+    return halfSearch(nums, 0, numsSize - 1, target);
 }
 int main()
 {
-    int n[] = {-1, 0, 3, 5, 9, 12};
-    printf("%d", search(n, 6, 11));
+    int n[] = {2, 5};
+    printf("%d", search(n, 2, 0));
     return 0;
 }
