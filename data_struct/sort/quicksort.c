@@ -3,7 +3,9 @@
 @Time    :   2020/03/05 17:14:04
 @Author  :   xiaosongsong
 @Desc    :   None
-快速排查
+快速排序
+
+此部分代码有问题,需要重新整理！
 
 */
 
@@ -26,7 +28,7 @@ int quickSort(int *node, int left, int right)
 }
 int main()
 {
-    int node[] = {70, 81, 59, 8, 2, 21, 92, 34, 13, 76};
+    int node[] = {5, 1, 1, 2, 0, 0};
     int count = sizeof(node) / sizeof(int);
     int left = 0, right = count - 1;
     int pos;
