@@ -21,23 +21,22 @@
 
 int **generateMatrix(int n, int *returnSize, int **returnColumnSizes)
 {
+    int k = 1, j = 0;
     int **result;
+    *returnSize = n;
     result = (int **)malloc(sizeof(int *) * n);
     for (int i = 0; i < n; i++)
     {
         result[i] = (int *)malloc(sizeof(int) * n);
     }
-    int k = 1, row = 0, line = 0;
-    ;
-    int m = n * n;
-    *returnSize = n;
-    while (k <= m)
+    for (int i = 0; i < n; i++)
     {
-        result[row][line] = k;
-        if (line % n == 2)
-            row++;
-        else
-            line++;
+        while (j < n)
+        {
+            result[i][j++] = k++;
+        }
+        result[i++][j] = k++;
+        
     }
 }
 int main()
