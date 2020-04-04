@@ -44,7 +44,8 @@ struct ListNode
 
 typedef struct ListStack
 {
-    int val;
+    struct ListNode *p;
+    int count;
     struct ListStack *next;
 } ListStack;
 
@@ -58,11 +59,12 @@ ListStack *initStack()
     p = NULL;
     return p;
 }
-ListStack *Push(ListStack *st, int val)
+ListStack *Push(ListStack *st, struct ListNode *p, int val)
 {
     ListStack *new;
     new = (ListStack *)malloc(sizeof(ListStack));
-    new->val = val;
+    new->p = p;
+    new->count = val;
     new->next = NULL;
     if (st == NULL)
         return new;
@@ -81,11 +83,6 @@ ListStack *Pop(ListStack *st)
         return st;
     }
     return NULL;
-}
-
-void getTopValue(ListStack *st, int *val)
-{
-    *val = st->val;
 }
 
 struct ListNode *createList(int *nodelist, int count)
@@ -108,29 +105,33 @@ struct ListNode *createList(int *nodelist, int count)
 }
 int *nextLargerNodes(struct ListNode *head, int *returnSize)
 {
+    int i = 0;
     int *result;
     result = (int *)malloc(sizeof(int) * 10000);
     *returnSize = 0;
     if (head == NULL)
         return NULL;
-    int maxValue = head->val, p = 0;
-    int pos = 0, count = 0;
+    struct ListNod *p;
     ListStack *st = initStack();
-
+    st = Push(st, head, i++);
+    head = head->next;
     while (head)
     {
-        st = Push(st, head->val);
-        getTopValue(st, &p);
-        if (p > maxValue)
+        while (!Empty(st) && st->p->val < head->val)
         {
-            for (int i = pos; i < count; i++)
-                result[i] = p;
-            pos = count;
-            maxValue = p;
+            result[st->count] = head->val;
+            st = Pop(st);
         }
+        st = Push(st, head, i++);
         head = head->next;
-        count++;
     }
+    while (!Empty(st))
+    {
+        result[st->count] = 0;
+        st = Pop(st);
+    }
+    *returnSize = i;
+    return result;
 }
 int main()
 {
