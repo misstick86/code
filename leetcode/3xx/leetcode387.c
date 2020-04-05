@@ -16,17 +16,64 @@ s = "loveleetcode",
 */
 
 #include <stdio.h>
-#include <string.h>
+#include <malloc.h>
+typedef struct HashTable
+{
+    char val;
+    int count;
+    int index;
+    struct HashTable *next;
+} HashTable;
+HashTable *initHask()
+{
+    HashTable *new;
+    new = (HashTable *)malloc(sizeof(HashTable));
+    new = NULL;
+    return new;
+}
+HashTable *addValue(HashTable *ht, char val, int index)
+{
+    HashTable *new;
+    HashTable *p = ht;
+    HashTable *parent = p;
+    new = (HashTable *)malloc(sizeof(HashTable));
+    new->val = val;
+    new->count = 1;
+    new->index = index;
+    new->next = NULL;
+    if (ht == NULL)
+        return new;
+    while (p && p->val != val)
+    {
+        parent = p;
+        p = p->next;
+    }
+    if (p == NULL)
+    {
+        parent->next = new;
+        return ht;
+    }
+    if (p->val == val)
+    {
+        p->count++;
+    }
+    return ht;
+}
+
 int firstUniqChar(char *s)
 {
-    char *p, *q;
-    char x;
     int i = 0;
+    HashTable *ht = initHask();
     while (*s != '\0')
     {
-        if (!strchr(++s, x))
-            return i;
-        i++;
+        ht = addValue(ht, *s, i++);
+        s++;
+    }
+    while (ht)
+    {
+        if (ht->count == 1)
+            return ht->index;
+        ht = ht->next;
     }
     return -1;
 }
