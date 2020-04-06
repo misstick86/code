@@ -36,19 +36,24 @@ n = 8
 */
 
 #include <stdio.h>
+
 int arrangeCoins(int n)
 {
-    int pos = n / 2;
-    while (pos)
+    if (n == 1 || n == 0)
+        return n;
+    unsigned sum = 0;
+    int i = 1;
+    while (i < n)
     {
-        if (pos * pos + pos <= 2 * n)
+        sum += i;
+        if (sum > n)
             break;
-        pos--;
+        i++;
     }
-    return pos;
+    return i - 1;
 }
 int main()
 {
-    printf("%d", arrangeCoins(5));
+    printf("%d,", arrangeCoins(100000));
     return 0;
 }
