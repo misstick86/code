@@ -28,8 +28,11 @@ canConstruct("aa", "aab") -> true
 bool canConstruct(char *ransomNote, char *magazine)
 {
     bool flag = true;
-    int len = strlen(ransomNote);
-    for (int i = 0; i < len; i++)
+    int len1 = strlen(ransomNote);
+    int len2 = strlen(magazine);
+    if (len2 < len1)
+        return false;
+    for (int i = 0; i < len1; i++)
     {
         flag = strstr(magazine, &ransomNote[i]) != NULL;
     }

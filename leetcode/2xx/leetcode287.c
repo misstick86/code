@@ -19,19 +19,18 @@
 #include <stdio.h>
 int findDuplicate(int *nums, int numsSize)
 {
-    int first, last;
-    for (last = 0; last < numsSize; last++)
+    int count = 0;
+    int i = 0;
+    while (count <= 2 * numsSize)
     {
-        first = last + 1;
-        while (nums[last] != nums[first] && first < numsSize)
-            first++;
-        if (nums[last] == nums[first])
-            return nums[last];
+        i = nums[i];
+        count++;
     }
+    return nums[i];
 }
 int main()
 {
-    int n[] = {1, 3, 4, 2, 2};
-    findDuplicate(n, 5);
+    int n[] = {1, 2, 3, 4, 2};
+    printf("%d", findDuplicate(n, 5));
     return 0;
 }
