@@ -1,2 +1,2 @@
-# c_code
-c语言学习笔记和leetcode练习题
+# my_code
+python和c语言学习笔记以及leetcode练习题
