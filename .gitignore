@@ -1,2 +1,5 @@
-.vscode/*
-first/*
+.vscode/
+c_code/first/
+python/.idea/
+python/venv/
+python/server_read/
