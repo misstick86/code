@@ -12,7 +12,7 @@ struct {
     __type(value, u64);
 } kprobe_map SEC("maps");
 
-
+SEC("kprobe/sys_execve")
 int kprobe_execve() {
    u32 key = 0;
    u64 initval = 1, *valp;
