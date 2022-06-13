@@ -1,7 +1,7 @@
 // +build ignore
 
-#include"vmlinux.h"
-#include <bpf/bpf_helpers.h>
+#include"common.h"
+#include"bpf_tracing.h"
 char __license[] SEC("license") = "Dual MIT/GPL";
 
 
@@ -10,7 +10,7 @@ struct {
     __uint(max_entries,1);
     __type(key, u32);
     __type(value, u64);
-} kprobe_map SEC("maps");
+} kprobe_map SEC(".maps");
 
 SEC("kprobe/sys_execve")
 int kprobe_execve() {
