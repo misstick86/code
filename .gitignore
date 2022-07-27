@@ -1,4 +1,5 @@
 .vscode/
+.idea
 c_code/first/
 python/.idea/
 python/venv/

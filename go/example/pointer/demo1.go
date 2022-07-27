@@ -28,6 +28,11 @@ func demo2() {
 
 }
 
+func demo4() {
+	i := 1
+	p := &i
+	fmt.Println(unsafe.Sizeof(p))
+}
 func main() {
-	demo2()
+	demo4()
 }
