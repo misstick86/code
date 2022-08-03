@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 
-void shellseort(int *node, int count, int k)
+void shellsort(int *node, int count, int k)
 {
     int temp, j; //临时存储
     for (int i = k; i < count; i = i + k)
@@ -30,7 +30,10 @@ int main()
     int d[] = {5, 3, 2, 1};
     for (int i = 0; i < 4; i++)
     {
-        shellseort(node, count, d[i]);
+        shellsort(node, count, d[i]);
+    }
+    for (int i=0; i< count; i++){
+        printf("%d ", node[i]);
     }
     return 0;
 }
