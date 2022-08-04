@@ -89,6 +89,7 @@ void treeAdjust(int e[], int n, int p)
                 e[i] = e[right];
         }
         i = (i - 1) / 2;
+        //  flag 避免死循环
         if (i == 0)
             flag--;
     }
