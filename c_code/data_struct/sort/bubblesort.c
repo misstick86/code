@@ -25,6 +25,9 @@ int main()
             }
         }
     }
-    printf("av");
+    for (int i = 0; i < count; i++)
+    {
+        printf("%d ", node[i]);
+    }
     return 0;
 }

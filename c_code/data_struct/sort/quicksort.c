@@ -1,17 +1,14 @@
 /*
 @File    :   quicksort.c
-@Time    :   2020/03/05 17:14:04
+@Time    :   2022/08/04 17:14:04
 @Author  :   xiaosongsong
-@Desc    :   None
-快速排序
-
-此部分代码有问题,需要重新整理！
+@Desc    :   快速排序
 
 */
 
 #include <stdio.h>
 
-int quickSort(int *node, int left, int right)
+int Pos(int *node, int left, int right)
 {
     int temp = node[left];
     while (left < right)
@@ -26,17 +23,29 @@ int quickSort(int *node, int left, int right)
     node[right] = temp;
     return right;
 }
+
+void quickSort(int *node, int left, int right)
+{
+    int pos;
+    if (left < right) {
+        pos = Pos(node, left, right);
+        quickSort(node, left, pos-1);
+        quickSort(node, pos+1, right);
+    }
+
+}
+
+
 int main()
 {
-    int node[] = {5, 1, 1, 2, 0, 0};
+
+    // 28 18 59 21 53 5 34 13 22 8 2 11
+    int node[] = {70, 81, 59, 21, 92, 34, 13, 76, 8, 2, 11, 22, 77, 53, 18, 28};
     int count = sizeof(node) / sizeof(int);
     int left = 0, right = count - 1;
-    int pos;
-    if (left < right)
-    {
-        pos = quickSort(node, left, right);
-        quickSort(node, left, pos - 1);
-        quickSort(node, pos + 1, right);
+    quickSort(node, left, right);
+    for(int i=0; i<count; i++){
+        printf("%d ", node[i]);
     }
     return 0;
 }

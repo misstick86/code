@@ -21,8 +21,8 @@ void Swap(int *a, int *b)
     *a = *b;
     *b = temp;
 }
-int selectSort(int *node, int k, int count)
-{
+
+int getPos(int *node, int k, int count){
     int pos = k;
     int min = node[k];
     for (int i = k + 1; i < count; i++)
@@ -33,20 +33,26 @@ int selectSort(int *node, int k, int count)
         }
     return pos;
 }
+void selectSort(int *node, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        int j = getPos(node, i, count);
+        if (j != i)
+            Swap(&node[i], &node[j]);
+    }
+
+}
 int main(int argc, char const *argv[])
 {
     int node[] = {70, 81, 59, 8, 2, 21, 92, 34, 13, 76};
     int count = sizeof(node) / sizeof(int);
-    for (int i = 0; i < count; i++)
-    {
-        int j = selectSort(node, i, count);
-        if (j != i)
-            Swap(&node[i], &node[j]);
-    }
+    selectSort(node, count);
     for (int i = 0; i < count; i++)
     {
         printf("%d,", node[i]);
     }
+
 }
 
 /*
