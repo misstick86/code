@@ -19,12 +19,18 @@
 输出: 99
 */
 
-#include <stdio.h>
-int singleNumber(int *nums, int numsSize)
-{
-}
-int main()
-{
+package main
 
-    return 0;
+import "fmt"
+
+//func singleNumber(nums []int) int {
+//    result := make(map[int]int, 1)
+//    for _, v := range nums {
+//        if
+//    }
+//}
+
+func main() {
+	//n := []int{2, 2, 3, 2}
+	fmt.Println()
 }
