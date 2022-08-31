@@ -25,27 +25,41 @@
 要求使用空间复杂度为 O(1) 的 原地 算法。
 */
 
-#include <stdio.h>
+package main
 
-
-void rotate(int *nums1, int numsSize, int k)
-{
-    int nums[] = {1, 2, 3, 4, 5, 6, 7};
-    int tmep;
-    k = k % numsSize;
-    if (k == 0)
-        return;
-    for (int i = 0; i < k; i++)
-    {
-        tmep = nums[numsSize - 1];
-        for (int j = numsSize - 1; j > 0; j--)
-            nums[j] = nums[j - 1];
-        nums[0] = tmep;
-    }
+func swap(a *int, b *int) {
+	k := *a
+	*a = *b
+	*b = k
 }
-int main()
-{
-    int nums[] = {1, 2, 3, 4, 5, 6, 7};
-    rotate(nums, 7, 3);
-    return 0;
+
+func cod(a int, b int) int {
+	for a != 0 {
+		a, b = b%a, a
+	}
+	return b
+}
+
+func rotate(nums []int, k int) {
+	length := len(nums)
+
+	if k%length == 0 {
+		return
+	}
+	k = k % length
+	for i := 0; i < cod(k, length); i++ {
+		last := i
+		first := i + k
+		for first != last {
+			swap(&nums[first], &nums[last])
+			first = (first + k) % length
+
+		}
+		nums[last] = nums[first]
+	}
+}
+func main() {
+	nums := []int{1, 2, 3, 4, 5, 6}
+	k := 3
+	rotate(nums, k)
 }
