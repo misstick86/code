@@ -24,24 +24,13 @@
 双指针
 */
 
-#include <stdio.h>
-#include <malloc.h>
-int *intersect(int *nums1, int nums1Size, int *nums2, int nums2Size, int *returnSize)
-{
-    int min = nums1Size > nums2Size ? nums1Size : nums2Size;
-    int *result;
-    result = (int *)malloc(sizeof(int) * min);
-    while ()
-    {
-        /* code */
-    }
-    
+package main
+
+func intersect(nums1 []int, nums2 []int) []int {
+	return []int{1}
 }
-int main()
-{
-    int size = 0;
-    int node1[] = {4, 9, 5};
-    int node2[] = {9, 4, 9, 8, 4};
-    intersect(node1, 3, node2, 5, &size);
-    return 0;
+func main() {
+	nums1 := []int{4, 9, 5}
+	nums2 := []int{9, 4, 9, 8, 4}
+	intersect(nums1, nums2)
 }
