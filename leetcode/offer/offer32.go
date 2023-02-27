@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -13,7 +15,7 @@ func BuildTree(node []int, n int) *TreeNode {
 	var root *TreeNode
 
 	root = new(TreeNode)
-	if node[n] == -1 {
+	if node[n] == 0 {
 		root = nil
 		return root
 	}
@@ -24,28 +26,36 @@ func BuildTree(node []int, n int) *TreeNode {
 	return root
 }
 
-func levelOrder(root *TreeNode) []int {
+func levelOrder(root *TreeNode) [][]int {
 	if root == nil {
-		return []int{}
+		return [][]int{}
 	}
-	p := make([]int, 0)
+	p := make([][]int, 0)
 	s := make([]*TreeNode, 0)
 	s = append(s, root)
 	for len(s) != 0 {
-		k := s[0]
-		if k.Left != nil {
-			s = append(s, k.Left)
+		n := len(s)
+		c := make([]int, 0)
+		for n > 0 {
+			k := s[0]
+			if k.Left != nil {
+				s = append(s, k.Left)
+			}
+			if k.Right != nil {
+				s = append(s, k.Right)
+			}
+			c = append(c, k.Val)
+			s = s[1:]
+			n--
 		}
-		if k.Right != nil {
-			s = append(s, k.Right)
-		}
-		p = append(p, k.Val)
-		s = s[1:]
+		p = append(p, c)
+
 	}
 	return p
 }
 func main() {
-	node := []int{3, 9, 20, 0, -1, 15, 7}
+	node := []int{3, 9, 20, 0, 0, 15, 7}
 	root := BuildTree(node, 0)
-	levelOrder(root)
+	p := levelOrder(root)
+	fmt.Println(p)
 }
