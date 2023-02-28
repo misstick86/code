@@ -6,13 +6,19 @@ package main
 
 import "fmt"
 
-func FindHalfPos(matrix [][]int, col int, row int, target int) (int, int) {
-	if matrix[col][row] == target {
-		return col, row
-	} else if matrix[col][row] < target {
-		col = col / 2
+func FindHalfPos(matrix [][]int, cols int, col int, rows int, row int, target int) (int, int) {
+	midcol := (cols + col) / 2
+	midrow := (rows + row) / 2
+	if midcol == cols && midrow == rows || midcol == col && midrow == row {
+		return midcol, midrow
+	}
+	if matrix[midcol][midrow] == target {
+		return midcol, midrow
+	}
+	if matrix[col][row] > target {
+		return FindHalfPos(matrix, cols, midcol, rows, midrow, target)
 	} else {
-
+		return FindHalfPos(matrix, midcol, col, midrow, row, target)
 	}
 	return 0, 1
 }
@@ -20,7 +26,7 @@ func FindHalfPos(matrix [][]int, col int, row int, target int) (int, int) {
 func searchMatrix(matrix [][]int, target int) bool {
 	col := len(matrix)
 	row := len(matrix[0])
-	posCol, posRow := FindHalfPos(matrix, col, row, target)
+	posCol, posRow := FindHalfPos(matrix, 0, col-1, 0, row-1, target)
 	fmt.Println(posCol, posRow)
 	return false
 }
