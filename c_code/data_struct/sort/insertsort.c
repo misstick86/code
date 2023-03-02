@@ -50,7 +50,7 @@ void insertSort2(int *node, int n) {
 
 int main(int argc, char const *argv[])
 {
-    int node[] = {49, 38, 65, 97, 76, 13, 27, 49};
+    int node[] = {-1, 0, 1, 2, -1, -4};
     int n = sizeof(node) / sizeof(int);
     // insertSort(node,n);
     insertSort2(node,n);
